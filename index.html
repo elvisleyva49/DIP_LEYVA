@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DIP Demo - 25/04/2025 22:14:08 -05</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body>
+    <h1>Última ejecución: 25/04/2025 22:14:08 -05</h1>
+    <pre>=== Processing with PayPal ===
+Processing checkout for order ORDER-123
+Processing $99.99 payment through PayPal
+Payment successful for order ORDER-123: { success: true, transactionId: 'PAYPAL-vifvs5mzy' }
+Processing refund for order ORDER-123
+Refunding $99.99 via PayPal for transaction PAYPAL-vifvs5mzy
+Refund successful for order ORDER-123: { success: true, refundId: 'REFUND-ya67zcvyo' }
+
+=== Processing with Stripe ===
+Processing checkout for order ORDER-456
+Processing $49.99 payment through Stripe
+Payment successful for order ORDER-456: { success: true, transactionId: 'STRIPE-4jkm507p6' }
+Processing refund for order ORDER-456
+Refunding $49.99 via Stripe for transaction STRIPE-4jkm507p6
+Refund successful for order ORDER-456: { success: true, refundId: 'REFUND-vtd11orgq' }
+
+=== Processing with Bank Transfer ===
+Processing checkout for order ORDER-789
+Processing $199.99 payment through Bank Transfer
+Payment successful for order ORDER-789: { success: true, transactionId: 'BANK-lj308dyvh' }
+Processing refund for order ORDER-789
+Refunding $199.99 via Bank Transfer for transaction BANK-lj308dyvh
+Refund successful for order ORDER-789: { success: true, refundId: 'REFUND-illcyo7ke' }</pre>
+</body>
+</html>
