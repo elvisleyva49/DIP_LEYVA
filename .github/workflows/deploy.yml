@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Necesario para GITHUB_TOKEN
+      contents: write  # Permisos necesarios para GITHUB_TOKEN
     
     steps:
     - uses: actions/checkout@v4
@@ -18,33 +18,37 @@ jobs:
       with:
         node-version: '20'
     
-    - name: Install dependencies
-      run: npm install
-      
-    - name: Generate output with Peru time
+    - name: Generate fresh HTML with Peru time
       run: |
-        # Generar contenido con marca de tiempo única
-        TIMESTAMP=$(TZ='America/Lima' date +'%s')
-        echo "<!DOCTYPE html>" > index.html
-        echo "<html><head>" >> index.html
-        echo "<title>DIP Demo</title>" >> index.html
-        echo "<meta http-equiv='Cache-Control' content='no-cache, no-store, must-revalidate'>" >> index.html
-        echo "<meta http-equiv='Pragma' content='no-cache'>" >> index.html
-        echo "<meta http-equiv='Expires' content='0'>" >> index.html
-        echo "</head><body>" >> index.html
-        echo "<h1>Dependency Inversion Principle Demo</h1>" >> index.html
-        echo "<h2>Última ejecución: $(TZ='America/Lima' date +'%A %d de %B del %Y a las %H:%M:%S %Z')</h2>" >> index.html
-        echo "<div hidden>Build ID: ${TIMESTAMP}</div>" >> index.html
-        echo "<pre>" >> index.html
-        node index.js >> index.html
-        echo "</pre></body></html>" >> index.html
+        # Obtener fecha/hora exacta de Perú
+        PERU_TIME=$(TZ='America/Lima' date +'%A %d de %B del %Y a las %H:%M:%S (%Z)')
         
-    - name: Deploy with forced update
+        # Crear archivo HTML completamente nuevo
+        cat <<EOF > index.html
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+            <meta http-equiv="Pragma" content="no-cache">
+            <meta http-equiv="Expires" content="0">
+            <title>DIP Demo - ${PERU_TIME}</title>
+        </head>
+        <body>
+            <h1>Dependency Inversion Principle Demo</h1>
+            <h2>Última ejecución: ${PERU_TIME}</h2>
+            <pre>
+        $(node index.js)
+            </pre>
+        </body>
+        </html>
+        EOF
+        
+    - name: Wipe and Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./
         publish_branch: gh-pages
         force_orphan: true
-        user_name: 'GitHub Actions'
-        user_email: '41898282+github-actions[bot]@users.noreply.github.com'
+        keep_files: false
