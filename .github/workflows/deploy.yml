@@ -24,7 +24,7 @@ jobs:
         echo "<!DOCTYPE html>" > index.html
         echo "<html><head><title>DIP Demo</title></head>" >> index.html
         echo "<body><h1>Dependency Inversion Principle Demo</h1>" >> index.html
-        echo "<h2>Última ejecución: $(date)</h2>" >> index.html
+        echo "<h2>Última ejecución: $(TZ='America/Lima' date +'%d/%m/%Y %H:%M:%S %Z')</h2>" >> index.html
         echo "<pre>" >> index.html
         node index.js >> index.html
         echo "</pre></body></html>" >> index.html
