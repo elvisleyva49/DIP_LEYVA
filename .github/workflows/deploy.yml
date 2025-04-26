@@ -8,47 +8,49 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Permisos necesarios para GITHUB_TOKEN
-    
+      contents: write
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup Node
       uses: actions/setup-node@v3
       with:
         node-version: '20'
-    
+
     - name: Generate fresh HTML with Peru time
       run: |
-        # Obtener fecha/hora exacta de Perú
-        PERU_TIME=$(TZ='America/Lima' date +'%A %d de %B del %Y a las %H:%M:%S (%Z)')
+        # 1. Crear directorio limpio
+        rm -rf ./gh-pages-content
+        mkdir -p ./gh-pages-content
+
+        # 2. Generar HTML con hora exacta de Perú
+        PERU_TIME=$(TZ='America/Lima' date +'%d/%m/%Y %H:%M:%S %Z')
         
-        # Crear archivo HTML completamente nuevo
-        cat <<EOF > index.html
+        cat <<EOF > ./gh-pages-content/index.html
         <!DOCTYPE html>
-        <html lang="es">
+        <html>
         <head>
-            <meta charset="UTF-8">
+            <title>DIP Demo - ${PERU_TIME}</title>
             <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
             <meta http-equiv="Pragma" content="no-cache">
             <meta http-equiv="Expires" content="0">
-            <title>DIP Demo - ${PERU_TIME}</title>
         </head>
         <body>
-            <h1>Dependency Inversion Principle Demo</h1>
-            <h2>Última ejecución: ${PERU_TIME}</h2>
-            <pre>
-        $(node index.js)
-            </pre>
+            <h1>Última ejecución: ${PERU_TIME}</h1>
+            <pre>$(node index.js)</pre>
         </body>
         </html>
         EOF
-        
+
     - name: Wipe and Deploy
-      uses: peaceiris/actions-gh-pages@v3
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
-        publish_branch: gh-pages
-        force_orphan: true
-        keep_files: false
+        token: ${{ secrets.GITHUB_TOKEN }}
+        branch: gh-pages
+        folder: gh-pages-content
+        clean: true
+        clean-exclude: |
+          .git
+          .nojekyll
+        single-commit: true
